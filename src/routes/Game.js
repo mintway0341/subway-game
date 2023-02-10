@@ -100,14 +100,16 @@ function Game() {
       (data) =>
         data.station_nm === newStation.station_nm && data.line_num !== nowLine
     );
+    console.log(transferStations);
     if (transferStations.length > 0 && newStation.station_nm !== "신촌") {
-      const willTransfer = Math.random() >= 0.55 ? 1 : 0;
+      const willTransfer = Math.random() >= 0 ? 1 : 0;
       if (willTransfer) {
         const newLineStation =
           transferStations[Math.floor(Math.random() * transferStations.length)];
+        if (nowLine !== newLineStation.line_num)
+          setSubText(`에서 ${newLineStation.line_num} 환승`);
         setLine(newLineStation.line_num);
         nowLine = newLineStation.line_num;
-        setSubText(`에서 ${newLineStation.line_num} 환승`);
       }
     }
     setStation(newStation.station_nm);
