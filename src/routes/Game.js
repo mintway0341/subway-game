@@ -87,6 +87,28 @@ function Game() {
     }
   }, [player, navigate]);
 
+  const handleClick = () => {
+    const correct = checkIfCorrect();
+    setInput("");
+    setSelect("환승안함");
+    if (!correct) {
+      clearTimeout(timer);
+      // alert("틀렸습니다.");
+      navigate("/wrong");
+      return;
+    }
+    let count = 0;
+    setPlayer(1);
+    let loop = setInterval(() => {
+      count++;
+      setPlayer((count + 1) % 4);
+      if (count >= 3) clearInterval(loop);
+      calculateNext();
+    }, 3000);
+  };
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") handleClick();
+  };
   const checkIfCorrect = () => {
     setSubText("");
     const result = Subways.DATA.filter(
@@ -172,7 +194,7 @@ function Game() {
               alignItems: "center",
             }}
           >
-            <Inputs>
+            <Inputs onKeyDown={handleKeyPress}>
               <TextField
                 autoFocus
                 value={input}
@@ -201,25 +223,7 @@ function Game() {
                 marginTop: "10px",
                 backgroundColor: colors[nowLine],
               }}
-              onClick={() => {
-                const correct = checkIfCorrect();
-                setInput("");
-                setSelect("환승안함");
-                if (!correct) {
-                  clearTimeout(timer);
-                  // alert("틀렸습니다.");
-                  navigate("/wrong");
-                  return;
-                }
-                let count = 0;
-                setPlayer(1);
-                let loop = setInterval(() => {
-                  count++;
-                  setPlayer((count + 1) % 4);
-                  if (count >= 3) clearInterval(loop);
-                  calculateNext();
-                }, 3000);
-              }}
+              onClick={handleClick}
             >
               확인
             </Button>
@@ -246,7 +250,7 @@ const Timer = styled.div`
 `;
 const NoTimer = styled.div`
   width: 100vw;
-  height: 30px;
+  height: 20px;
   background-color: transparent;
 `;
 const MainContainer = styled.div`
