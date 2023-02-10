@@ -163,7 +163,7 @@ function Game() {
       if (select !== "환승안함") {
         setLine(select);
         nowLine = select;
-        setSubText(`에서 ${select} 환승`);
+        setSubText(`에서 ${realLines[select]} 환승`);
       }
       return true;
     }
@@ -195,10 +195,11 @@ function Game() {
         if (
           nowLine !== newLineStation.line_num &&
           lines.includes(newLineStation.line_num)
-        )
-          setSubText(`에서 ${newLineStation.line_num} 환승`);
-        setLine(newLineStation.line_num);
-        nowLine = newLineStation.line_num;
+        ) {
+          setSubText(`에서 ${realLines[newLineStation.line_num]} 환승`);
+          setLine(newLineStation.line_num);
+          nowLine = newLineStation.line_num;
+        }
       }
     }
     setStation(newStation.station_nm);
