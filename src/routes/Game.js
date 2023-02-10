@@ -42,6 +42,8 @@ function Game() {
 
   useEffect(() => {
     visitedStations = [];
+    const firstLine = lines[1 + Math.floor(Math.random() * 13)];
+    setLine(firstLine);
   }, []);
   useEffect(() => {
     clearTimeout(timer);
