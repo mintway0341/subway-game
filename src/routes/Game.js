@@ -103,7 +103,7 @@ function Game() {
     );
     console.log(transferStations);
     if (transferStations.length > 0 && newStation.station_nm !== "신촌") {
-      const willTransfer = Math.random() >= 0 ? 1 : 0;
+      const willTransfer = Math.random() >= 0.55 ? 1 : 0;
       if (willTransfer) {
         const newLineStation =
           transferStations[Math.floor(Math.random() * transferStations.length)];
