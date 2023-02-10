@@ -254,13 +254,15 @@ const Timer = styled.div`
   height: 20px;
   background-color: ${(props) => props.color};
   animation: ${timeDecrease} 10s linear;
-  position: fixed;
+  position: absolute;
+  bottom: 0;
 `;
 const NoTimer = styled.div`
   width: 100vw;
   height: 20px;
   background-color: transparent;
-  position: fixed;
+  position: absolute;
+  bottom: 0;
 `;
 const MainContainer = styled.div`
   display: flex;
