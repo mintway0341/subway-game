@@ -7,6 +7,7 @@ import TextTransition, { presets } from "react-text-transition";
 let visitedStations = [];
 let timer;
 let nowLine = "";
+let countCorrect = 0;
 const lines = [
   "환승안함",
   "01호선",
@@ -73,6 +74,7 @@ function Game() {
 
   useEffect(() => {
     visitedStations = [];
+    countCorrect = 0;
     const firstLine = lines[1 + Math.floor(Math.random() * 13)];
     setLine(firstLine);
     nowLine = firstLine;
@@ -84,6 +86,7 @@ function Game() {
       timer = setTimeout(() => {
         // alert("시간 초과");
         navigate("/timeover");
+        console.log(countCorrect);
       }, 10000);
     }
   }, [player, navigate]);
@@ -92,10 +95,12 @@ function Game() {
     const correct = checkIfCorrect();
     setInput("");
     setSelect("환승안함");
+    if (correct) countCorrect++;
     if (!correct) {
       clearTimeout(timer);
       // alert("틀렸습니다.");
       navigate("/wrong");
+      console.log(countCorrect);
       return;
     }
     let count = 0;
@@ -277,7 +282,7 @@ const PlayersContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 50px;
 `;
 const Player = styled.div`
   display: flex;
