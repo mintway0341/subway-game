@@ -310,7 +310,7 @@ const PlayersContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 80px;
 `;
 const Player = styled.div`
   display: flex;
