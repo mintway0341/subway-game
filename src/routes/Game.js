@@ -25,13 +25,13 @@ const lines = [
   "신림선",
   "인천선",
   "인천2호선",
-  "경춘선",
-  "경강선",
-  "김포도시철도",
-  "서해선",
-  "용인경전철",
-  "의정부경전철",
   "우이신설경전철",
+  // "경춘선",
+  // "경강선",
+  // "김포도시철도",
+  // "서해선",
+  // "용인경전철",
+  // "의정부경전철",
 ];
 
 function Game() {
@@ -58,13 +58,13 @@ function Game() {
     신림선: "#6789CA",
     인천선: "#759CCE",
     인천2호선: "#F5A251",
+    우이신설경전철: "#B7C450",
     경춘선: "#178C72",
     경강선: "#0054A6",
     김포도시철도: "#AD8605",
     서해선: "#8FC31F",
     용인경전철: "#56AD2D",
     의정부경전철: "#FD8100",
-    우이신설경전철: "#B7C450",
   };
 
   const players = [0, 1, 2, 3];
@@ -159,7 +159,10 @@ function Game() {
       if (willTransfer) {
         const newLineStation =
           transferStations[Math.floor(Math.random() * transferStations.length)];
-        if (nowLine !== newLineStation.line_num)
+        if (
+          nowLine !== newLineStation.line_num &&
+          lines.includes(newLineStation.line_num)
+        )
           setSubText(`에서 ${newLineStation.line_num} 환승`);
         setLine(newLineStation.line_num);
         nowLine = newLineStation.line_num;
