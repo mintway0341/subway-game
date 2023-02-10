@@ -67,6 +67,26 @@ function Game() {
     용인경전철: "#56AD2D",
     의정부경전철: "#FD8100",
   };
+  const realLines = {
+    환승안함: "환승안함",
+    "01호선": "1호선",
+    "02호선": "2호선",
+    "03호선": "3호선",
+    "04호선": "4호선",
+    "05호선": "5호선",
+    "06호선": "6호선",
+    "07호선": "7호선",
+    "08호선": "8호선",
+    "09호선": "9호선",
+    수인분당선: "수인분당선",
+    신분당선: "신분당선",
+    공항철도: "공항철도",
+    경의선: "경의중앙선",
+    신림선: "신림선",
+    인천선: "인천1호선",
+    인천2호선: "인천2호선",
+    우이신설경전철: "우이신설선",
+  };
 
   const players = [0, 1, 2, 3];
 
@@ -117,12 +137,20 @@ function Game() {
   };
   const checkIfCorrect = () => {
     setSubText("");
-    const result = Subways.DATA.filter(
+    var result = Subways.DATA.filter(
       (data) =>
         data.line_num === nowLine &&
         data.station_nm === input &&
         !visitedStations.includes(data.station_nm)
     );
+    if (input === "이수") {
+      result = Subways.DATA.filter(
+        (data) =>
+          data.line_num === nowLine &&
+          data.station_nm === "총신대입구" &&
+          !visitedStations.includes(data.station_nm)
+      );
+    }
     if (result.length > 0) {
       const result2 = Subways.DATA.filter(
         (data) =>
@@ -131,7 +159,7 @@ function Game() {
       if (select !== "환승안함" && result2.length === 0) return false;
       if (input === "신촌" && select !== "환승안함") return false;
       setStation(input);
-      visitedStations.push(input);
+      visitedStations.push(input === "이수" ? "총신대입구" : input);
       if (select !== "환승안함") {
         setLine(select);
         nowLine = select;
@@ -189,7 +217,7 @@ function Game() {
             )
           )}
         </PlayersContainer>
-        <LineNumber color={colors[nowLine]}>{line}</LineNumber>
+        <LineNumber color={colors[nowLine]}>{realLines[line]}</LineNumber>
         <Box color={colors[nowLine]} />
         <Circle color={colors[nowLine]}>
           <StationName
@@ -227,7 +255,7 @@ function Game() {
                 {lines
                   .filter((v) => v !== line)
                   .map((v) => (
-                    <MenuItem value={v}>{v}</MenuItem>
+                    <MenuItem value={v}>{realLines[v]}</MenuItem>
                   ))}
               </Select>
             </Inputs>
