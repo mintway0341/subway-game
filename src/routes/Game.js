@@ -84,7 +84,7 @@ function Game() {
       timer = setTimeout(() => {
         // alert("시간 초과");
         navigate("/timeover");
-      }, 8000);
+      }, 10000);
     }
   }, [player, navigate]);
 
@@ -184,7 +184,11 @@ function Game() {
         <LineNumber color={colors[nowLine]}>{line}</LineNumber>
         <Box color={colors[nowLine]} />
         <Circle color={colors[nowLine]}>
-          <StationName springConfig={presets.wobbly} color={colors[nowLine]}>
+          <StationName
+            springConfig={presets.wobbly}
+            // inline={true}
+            color={colors[nowLine]}
+          >
             {station}
           </StationName>
           <SubText color={colors[nowLine]}>{subtext}</SubText>
@@ -249,7 +253,7 @@ const Timer = styled.div`
   width: 100vw;
   height: 20px;
   background-color: ${(props) => props.color};
-  animation: ${timeDecrease} 8s linear;
+  animation: ${timeDecrease} 10s linear;
 `;
 const NoTimer = styled.div`
   width: 100vw;
