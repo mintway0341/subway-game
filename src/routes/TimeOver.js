@@ -4,7 +4,7 @@ function TimeOver() {
   return (
     <div>
       <p>시간초과 ㅜㅡㅜ</p>
-      <Link to="/game">
+      <Link to="/">
         <p>다시하기</p>
       </Link>
     </div>

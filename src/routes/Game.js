@@ -4,6 +4,7 @@ import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 let visitedStations = [];
 let timer;
+let nowLine = "";
 const lines = [
   "환승안함",
   "01호선",
@@ -44,7 +45,9 @@ function Game() {
     visitedStations = [];
     const firstLine = lines[1 + Math.floor(Math.random() * 13)];
     setLine(firstLine);
+    nowLine = firstLine;
   }, []);
+
   useEffect(() => {
     clearTimeout(timer);
     if (player === 0) {
@@ -58,7 +61,7 @@ function Game() {
   const checkIfCorrect = () => {
     const result = Subways.DATA.filter(
       (data) =>
-        data.line_num === line &&
+        data.line_num === nowLine &&
         data.station_nm === input &&
         !visitedStations.includes(data.station_nm)
     );
@@ -73,6 +76,7 @@ function Game() {
       visitedStations.push(input);
       if (select !== "환승안함") {
         setLine(select);
+        nowLine = select;
         setSubText(`에서 ${select} 환승`);
       }
       return true;
@@ -81,9 +85,10 @@ function Game() {
   };
   const calculateNext = () => {
     setSubText("");
+    console.log(nowLine);
     const result = Subways.DATA.filter(
       (data) =>
-        data.line_num === line && !visitedStations.includes(data.station_nm)
+        data.line_num === nowLine && !visitedStations.includes(data.station_nm)
     );
     if (result.length === 0) {
       // 종료
@@ -93,7 +98,7 @@ function Game() {
     console.log(newStation);
     const transferStations = Subways.DATA.filter(
       (data) =>
-        data.station_nm === newStation.station_nm && data.line_num !== line
+        data.station_nm === newStation.station_nm && data.line_num !== nowLine
     );
     if (transferStations.length > 0 && newStation.station_nm !== "신촌") {
       const willTransfer = Math.random() >= 0.55 ? 1 : 0;
@@ -101,6 +106,7 @@ function Game() {
         const newLineStation =
           transferStations[Math.floor(Math.random() * transferStations.length)];
         setLine(newLineStation.line_num);
+        nowLine = newLineStation.line_num;
         setSubText(`에서 ${newLineStation.line_num} 환승`);
       }
     }
@@ -146,7 +152,7 @@ function Game() {
           }
           let count = 0;
           setPlayer(1);
-          var loop = setInterval(() => {
+          let loop = setInterval(() => {
             count++;
             setPlayer((count + 1) % 4);
             if (count >= 3) clearInterval(loop);

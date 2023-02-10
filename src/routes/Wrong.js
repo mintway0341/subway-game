@@ -4,7 +4,7 @@ function Wrong() {
   return (
     <div>
       <p>틀렸습니다 ㅜㅡㅜ</p>
-      <Link to="/game">
+      <Link to="/">
         <p>다시하기</p>
       </Link>
     </div>
