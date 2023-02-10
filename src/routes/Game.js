@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Subways from "../api/subwaysApi.json";
 import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { MenuItem, Select, TextField, Button } from "@mui/material";
 let visitedStations = [];
 let timer;
 let nowLine = "";
@@ -29,15 +30,43 @@ const lines = [
   "서해선",
   "용인경전철",
   "의정부경전철",
+  "우이신설경전철",
 ];
 
 function Game() {
   const [input, setInput] = useState("");
   const [select, setSelect] = useState("환승안함");
   const [line, setLine] = useState("02호선");
-  const [station, setStation] = useState("");
+  const [station, setStation] = useState("시작해주세요");
   const [subtext, setSubText] = useState("");
   const [player, setPlayer] = useState(0);
+  const colors = {
+    "01호선": "#0052A4",
+    "02호선": "#00A84D",
+    "03호선": "#EF7C1C",
+    "04호선": "#00A5DE",
+    "05호선": "#996CAC",
+    "06호선": "#CD7C2F",
+    "07호선": "#747F00",
+    "08호선": "#E6186C",
+    "09호선": "#BDB092",
+    수인분당선: "#FABE00",
+    신분당선: "#D31145",
+    공항철도: "#0065B3",
+    경의선: "#77C4A3",
+    신림선: "#6789CA",
+    인천선: "#759CCE",
+    인천2호선: "#F5A251",
+    경춘선: "#178C72",
+    경강선: "#0054A6",
+    김포도시철도: "#AD8605",
+    서해선: "#8FC31F",
+    용인경전철: "#56AD2D",
+    의정부경전철: "#FD8100",
+    우이신설경전철: "#B7C450",
+  };
+
+  const players = [0, 1, 2, 3];
 
   const navigate = useNavigate();
 
@@ -118,71 +147,189 @@ function Game() {
   };
   return (
     <div>
-      <p>{player}</p>
-      <p>{line}</p>
-      <p>
-        {station}
-        {subtext}
-      </p>
-      <input
-        value={input}
-        onChange={(e) => {
-          setInput(e.target.value);
-        }}
-      />
-      <select
-        onChange={(e) => {
-          setSelect(e.target.value);
-        }}
-        value={select}
-      >
-        {lines
-          .filter((v) => v !== line)
-          .map((v) => (
-            <option value={v}>{v}</option>
-          ))}
-      </select>
-      <button
-        onClick={() => {
-          const correct = checkIfCorrect();
-          setInput("");
-          setSelect("환승안함");
-          if (!correct) {
-            clearTimeout(timer);
-            // alert("틀렸습니다.");
-            navigate("/wrong");
-            return;
-          }
-          let count = 0;
-          setPlayer(1);
-          let loop = setInterval(() => {
-            count++;
-            setPlayer((count + 1) % 4);
-            if (count >= 3) clearInterval(loop);
-            calculateNext();
-          }, 3000);
-        }}
-      >
-        확인
-      </button>
-      {player === 0 && <Timer />}
+      {player === 0 ? <Timer color={colors[nowLine]} /> : <NoTimer />}
+      <MainContainer>
+        <PlayersContainer>
+          {players.map((v) =>
+            v === player ? (
+              <Player color={colors[nowLine]}></Player>
+            ) : (
+              <NotPlayer color={colors[nowLine]}></NotPlayer>
+            )
+          )}
+        </PlayersContainer>
+        <LineNumber color={colors[nowLine]}>{line}</LineNumber>
+        <Box color={colors[nowLine]} />
+        <Circle color={colors[nowLine]}>
+          <StationName color={colors[nowLine]}>{station}</StationName>
+          <SubText color={colors[nowLine]}>{subtext}</SubText>
+        </Circle>
+        {player === 0 && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Inputs>
+              <TextField
+                autoFocus
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                }}
+              />
+              <Select
+                style={{ marginLeft: "10px" }}
+                onChange={(e) => {
+                  setSelect(e.target.value);
+                }}
+                value={select}
+              >
+                {lines
+                  .filter((v) => v !== line)
+                  .map((v) => (
+                    <MenuItem value={v}>{v}</MenuItem>
+                  ))}
+              </Select>
+            </Inputs>
+            <Button
+              variant="contained"
+              style={{
+                width: "200px",
+                marginTop: "10px",
+                backgroundColor: colors[nowLine],
+              }}
+              onClick={() => {
+                const correct = checkIfCorrect();
+                setInput("");
+                setSelect("환승안함");
+                if (!correct) {
+                  clearTimeout(timer);
+                  // alert("틀렸습니다.");
+                  navigate("/wrong");
+                  return;
+                }
+                let count = 0;
+                setPlayer(1);
+                let loop = setInterval(() => {
+                  count++;
+                  setPlayer((count + 1) % 4);
+                  if (count >= 3) clearInterval(loop);
+                  calculateNext();
+                }, 3000);
+              }}
+            >
+              확인
+            </Button>
+          </div>
+        )}
+      </MainContainer>
     </div>
   );
 }
 
 const timeDecrease = keyframes`
   0% {
-    width: 100px;
+    width: 100vw;
   }
   100% {
     width: 0px;
   }
 `;
 const Timer = styled.div`
-  width: 100px;
+  width: 100vw;
   height: 20px;
-  background-color: black;
+  background-color: ${(props) => props.color};
   animation: ${timeDecrease} 8s linear;
+`;
+const NoTimer = styled.div`
+  width: 100vw;
+  height: 30px;
+  background-color: transparent;
+`;
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const PlayersContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+`;
+const Player = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 15px;
+  background-color: ${(props) => props.color};
+`;
+const NotPlayer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 15px;
+  background-color: ${(props) => props.color};
+  opacity: 0.3;
+`;
+const Box = styled.div`
+  width: 100vw;
+  height: 50px;
+  margin-top: 200px;
+  margin-bottom: -170px;
+  background-color: ${(props) => props.color};
+`;
+const Circle = styled.div`
+  width: 250px;
+  height: 250px;
+  background-color: white;
+  border-width: 20px;
+  border-color: ${(props) => props.color};
+  border-style: solid;
+  border-radius: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+`;
+const LineNumber = styled.p`
+  color: ${(props) => props.color};
+  font-size: 20px;
+  z-index: 10;
+  margin-top: 100px;
+  margin-bottom: -160px;
+`;
+const StationName = styled.p`
+  color: ${(props) => props.color};
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 0px;
+  margin-bottom: 0px;
+`;
+const SubText = styled.p`
+  color: ${(props) => props.color};
+  font-size: 15px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+`;
+const Inputs = styled.div`
+  flex-direction: row;
+  margin-top: 20px;
 `;
 
 export default Game;
