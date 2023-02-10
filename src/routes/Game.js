@@ -41,6 +41,9 @@ function Game() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    visitedStations = [];
+  }, []);
+  useEffect(() => {
     clearTimeout(timer);
     if (player === 0) {
       timer = setTimeout(() => {
@@ -48,7 +51,7 @@ function Game() {
         navigate("/timeover");
       }, 6000);
     }
-  }, [player]);
+  }, [player, navigate]);
 
   const checkIfCorrect = () => {
     const result = Subways.DATA.filter(
