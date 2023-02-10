@@ -3,6 +3,7 @@ import Subways from "../api/subwaysApi.json";
 import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { MenuItem, Select, TextField, Button } from "@mui/material";
+import TextTransition, { presets } from "react-text-transition";
 let visitedStations = [];
 let timer;
 let nowLine = "";
@@ -183,7 +184,9 @@ function Game() {
         <LineNumber color={colors[nowLine]}>{line}</LineNumber>
         <Box color={colors[nowLine]} />
         <Circle color={colors[nowLine]}>
-          <StationName color={colors[nowLine]}>{station}</StationName>
+          <StationName springConfig={presets.wobbly} color={colors[nowLine]}>
+            {station}
+          </StationName>
           <SubText color={colors[nowLine]}>{subtext}</SubText>
         </Circle>
         {player === 0 && (
@@ -318,7 +321,7 @@ const LineNumber = styled.p`
   margin-top: 100px;
   margin-bottom: -160px;
 `;
-const StationName = styled.p`
+const StationName = styled(TextTransition)`
   color: ${(props) => props.color};
   font-size: 28px;
   font-weight: 700;
