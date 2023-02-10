@@ -59,6 +59,7 @@ function Game() {
   }, [player, navigate]);
 
   const checkIfCorrect = () => {
+    setSubText("");
     const result = Subways.DATA.filter(
       (data) =>
         data.line_num === nowLine &&
