@@ -36,7 +36,7 @@ const lines = [
 function Game() {
   const [input, setInput] = useState("");
   const [select, setSelect] = useState("환승안함");
-  const [line, setLine] = useState("02호선");
+  const [line, setLine] = useState("");
   const [station, setStation] = useState("시작해주세요");
   const [subtext, setSubText] = useState("");
   const [player, setPlayer] = useState(0);
@@ -274,7 +274,7 @@ const Player = styled.div`
   height: 50px;
   margin-left: 10px;
   margin-right: 10px;
-  border-radius: 15px;
+  border-radius: 18.75px;
   background-color: ${(props) => props.color};
 `;
 const NotPlayer = styled.div`
