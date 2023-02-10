@@ -51,7 +51,7 @@ function Game() {
       timer = setTimeout(() => {
         // alert("시간 초과");
         navigate("/timeover");
-      }, 6000);
+      }, 8000);
     }
   }, [player, navigate]);
 
@@ -173,7 +173,7 @@ const Timer = styled.div`
   width: 100px;
   height: 20px;
   background-color: black;
-  animation: ${timeDecrease} 6s linear;
+  animation: ${timeDecrease} 8s linear;
 `;
 
 export default Game;
