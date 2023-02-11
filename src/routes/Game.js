@@ -250,8 +250,8 @@ function Game() {
                 }}
                 style={{ width: "160px" }}
               />
-              <Select
-                style={{ marginLeft: "10px", width: "130px" }}
+              <select
+                style={{ marginLeft: "10px", width: "130px", height: "55px" }}
                 onChange={(e) => {
                   setSelect(e.target.value);
                 }}
@@ -260,9 +260,9 @@ function Game() {
                 {lines
                   .filter((v) => v !== line)
                   .map((v) => (
-                    <MenuItem value={v}>{realLines[v]}</MenuItem>
+                    <option value={v}>{realLines[v]}</option>
                   ))}
-              </Select>
+              </select>
             </Inputs>
             <Button
               variant="contained"
