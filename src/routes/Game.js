@@ -377,6 +377,9 @@ const StationName = styled(TextTransition)`
   font-weight: 700;
   margin-top: 0px;
   margin-bottom: 0px;
+  white-space: nowrap;
+  display: inline-block;
+  text-align: center;
 `;
 const SubText = styled.p`
   color: ${(props) => props.color};
