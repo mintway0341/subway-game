@@ -110,7 +110,7 @@ function Game() {
         // alert("시간 초과");
         navigate("/wrong", { state: { value: visitedStations } });
         console.log(countCorrect);
-      }, 10000000);
+      }, 10000);
     }
   }, [player, navigate]);
 
@@ -133,7 +133,7 @@ function Game() {
       setPlayer((count + 1) % 4);
       if (count >= 3) clearInterval(loop);
       calculateNext();
-    }, 3000);
+    }, 2500);
   };
   const handleKeyPress = (e) => {
     if (e.key === "Enter") handleClick();
