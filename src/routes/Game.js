@@ -149,6 +149,14 @@ function Game() {
           !visitedStations.includes("총신대입구")
       );
     }
+    if (input === "살피재") {
+      result = Subways.DATA.filter(
+        (data) =>
+          data.line_num === line &&
+          data.station_nm === "숭실대입구" &&
+          !visitedStations.includes("숭실대입구")
+      );
+    }
     if (result.length > 0) {
       const result2 = Subways.DATA.filter(
         (data) =>
@@ -165,7 +173,11 @@ function Game() {
         return false;
       if (input === "신촌" && select !== "환승안함") return false;
       setStation(input);
-      visitedStations.push(input === "이수" ? "총신대입구" : input);
+      let newVisited = "";
+      if (input === "이수") newVisited = "총신대입구";
+      else if (input === "살피재") newVisited = "숭실대입구";
+      else newVisited = input;
+      visitedStations.push(newVisited);
       if (select !== "환승안함") {
         line = select;
         setSubText(`에서 ${realLines[select]} 환승`);
