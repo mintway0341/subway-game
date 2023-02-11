@@ -92,6 +92,7 @@ function Game() {
 
   useEffect(() => {
     const firstLine = lines[1 + Math.floor(Math.random() * 13)];
+    visitedStations = [];
     line = firstLine;
     setSubText("");
     return () => {
