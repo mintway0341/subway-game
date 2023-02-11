@@ -98,6 +98,9 @@ function Game() {
     const firstLine = lines[1 + Math.floor(Math.random() * 13)];
     setLine(firstLine);
     nowLine = firstLine;
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
