@@ -209,7 +209,7 @@ function Game() {
     visitedStations.push(newStation.station_nm);
   };
   return (
-    <div style={{ backgroundColor: "white" }}>
+    <div style={{ backgroundColor: "white"}}>
       {player === 0 ? <Timer color={colors[nowLine]} /> : <NoTimer />}
       <MainContainer>
         <PlayersContainer>
@@ -311,6 +311,7 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: white;
 `;
 const PlayersContainer = styled.div`
   display: flex;
