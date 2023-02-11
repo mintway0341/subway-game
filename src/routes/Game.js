@@ -153,7 +153,15 @@ function Game() {
         (data) =>
           data.line_num === select && data.station_nm === result[0].station_nm
       );
-      if (select !== "환승안함" && result2.length === 0) return false;
+      if (
+        select !== "환승안함" &&
+        result2.length === 0 &&
+        !(
+          (select === "04호선" || select === "07호선") &&
+          (input === "총신대입구" || input === "이수")
+        )
+      )
+        return false;
       if (input === "신촌" && select !== "환승안함") return false;
       setStation(input);
       setVisitedStations((prev) => [
