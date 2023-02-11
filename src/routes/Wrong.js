@@ -1,8 +1,11 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@mui/material";
 import styled from "styled-components";
+import { useState } from "react";
+import DeveloperPage from "../components/developerPage/developerPage.component";
 
 function Wrong() {
+  const [clicked, setClicked] = useState(false);
   const location = useLocation();
   const visitedStations = location?.state?.value ?? [];
   console.log(visitedStations);
@@ -55,6 +58,14 @@ function Wrong() {
       >
         다시하기
       </Button>
+      <p
+        onClick={() => {
+          setClicked(true);
+        }}
+      >
+        개발자에게 관심 주기
+      </p>
+      {clicked ? <DeveloperPage setClicked={setClicked} /> : null}
     </Container>
   );
 }
