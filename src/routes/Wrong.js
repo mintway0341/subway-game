@@ -79,6 +79,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: white;
 `;
 const Ticket = styled.div`
   width: 80vw;
