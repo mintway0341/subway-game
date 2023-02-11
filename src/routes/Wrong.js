@@ -157,7 +157,10 @@ const TicketRight = styled.div`
   align-items: center;
 `;
 const StationText = styled.p`
-  font-size: 5vw;
+  font-size: 4vw;
   font-weight: 700;
+  white-space: nowrap;
+  display: inline-block;
+  text-align: center;
 `;
 export default Wrong;
