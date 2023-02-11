@@ -146,7 +146,7 @@ const TicketCenter = styled.div`
   align-items: center;
 `;
 const TicketCenterText = styled.p`
-  font-size: 30px;
+  font-size: 5vw;
 `;
 const TicketRight = styled.div`
   width: 37.5vw;
@@ -157,7 +157,7 @@ const TicketRight = styled.div`
   align-items: center;
 `;
 const StationText = styled.p`
-  font-size: 25px;
+  font-size: 5vw;
   font-weight: 700;
 `;
 export default Wrong;

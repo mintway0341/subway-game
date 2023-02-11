@@ -16,8 +16,18 @@ const DeveloperPage = ({ setClicked }) => {
             alt="Yoomin Kang's Memoji"
           />
           <div className="developer1-text-container">
-            <h2 style={{ marginTop: "0px", marginBottom: "5px" }}>YM Kang</h2>
-            <p style={{ marginTop: "0px", marginBottom: "0px" }}>
+            <h2
+              style={{ marginTop: "0px", marginBottom: "5px", fontSize: "4vw" }}
+            >
+              YM Kang
+            </h2>
+            <p
+              style={{
+                marginTop: "0px",
+                marginBottom: "0px",
+                fontSize: "2.5vw",
+              }}
+            >
               고려대학교 건축학과 21
             </p>
           </div>
