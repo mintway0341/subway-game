@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 function Wrong() {
   const location = useLocation();
-  const visitedStations = location.state.value;
+  const visitedStations = location?.state?.value ?? [];
   console.log(visitedStations);
 
   const navigate = useNavigate();
