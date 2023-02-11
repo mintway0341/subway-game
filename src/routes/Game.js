@@ -4,44 +4,42 @@ import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { MenuItem, Select, TextField, Button } from "@mui/material";
 import TextTransition, { presets } from "react-text-transition";
-let visitedStations = [];
 let timer;
-let nowLine = "";
-let countCorrect = 0;
-const lines = [
-  "환승안함",
-  "01호선",
-  "02호선",
-  "03호선",
-  "04호선",
-  "05호선",
-  "06호선",
-  "07호선",
-  "08호선",
-  "09호선",
-  "수인분당선",
-  "신분당선",
-  "공항철도",
-  "경의선",
-  "신림선",
-  "인천선",
-  "인천2호선",
-  "우이신설경전철",
-  // "경춘선",
-  // "경강선",
-  // "김포도시철도",
-  // "서해선",
-  // "용인경전철",
-  // "의정부경전철",
-];
+let line = "";
 
 function Game() {
   const [input, setInput] = useState("");
   const [select, setSelect] = useState("환승안함");
-  const [line, setLine] = useState("");
   const [station, setStation] = useState("시작해주세요");
-  const [subtext, setSubText] = useState("");
+  const [subtext, setSubText] = useState(" ");
   const [player, setPlayer] = useState(0);
+  const [visitedStations, setVisitedStations] = useState([]);
+  const lines = [
+    "환승안함",
+    "01호선",
+    "02호선",
+    "03호선",
+    "04호선",
+    "05호선",
+    "06호선",
+    "07호선",
+    "08호선",
+    "09호선",
+    "수인분당선",
+    "신분당선",
+    "공항철도",
+    "경의선",
+    "신림선",
+    "인천선",
+    "인천2호선",
+    "우이신설경전철",
+    // "경춘선",
+    // "경강선",
+    // "김포도시철도",
+    // "서해선",
+    // "용인경전철",
+    // "의정부경전철",
+  ];
   const colors = {
     "01호선": "#0052A4",
     "02호선": "#00A84D",
@@ -93,11 +91,9 @@ function Game() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    visitedStations = [];
-    countCorrect = 0;
     const firstLine = lines[1 + Math.floor(Math.random() * 13)];
-    setLine(firstLine);
-    nowLine = firstLine;
+    line = firstLine;
+    setSubText("");
     return () => {
       clearTimeout(timer);
     };
@@ -109,21 +105,18 @@ function Game() {
       timer = setTimeout(() => {
         // alert("시간 초과");
         navigate("/wrong", { state: { value: visitedStations } });
-        console.log(countCorrect);
       }, 10000);
     }
-  }, [player, navigate]);
+  }, [player, visitedStations, navigate]);
 
   const handleClick = () => {
     const correct = checkIfCorrect();
     setInput("");
     setSelect("환승안함");
-    if (correct) countCorrect++;
     if (!correct) {
       clearTimeout(timer);
       // alert("틀렸습니다.");
       navigate("/wrong", { state: { value: visitedStations } });
-      console.log(countCorrect);
       return;
     }
     let count = 0;
@@ -142,16 +135,17 @@ function Game() {
     setSubText("");
     var result = Subways.DATA.filter(
       (data) =>
-        data.line_num === nowLine &&
+        data.line_num === line &&
         data.station_nm === input &&
         !visitedStations.includes(data.station_nm)
     );
-    if (input === "이수") {
+    if (input === "이수" || input === "총신대입구") {
       result = Subways.DATA.filter(
         (data) =>
-          data.line_num === nowLine &&
-          data.station_nm === "총신대입구" &&
-          !visitedStations.includes(data.station_nm)
+          data.line_num === line &&
+          (data.station_nm === "총신대입구" || data.station_nm === "이수") &&
+          !visitedStations.includes("이수") &&
+          !visitedStations.includes("총신대입구")
       );
     }
     if (result.length > 0) {
@@ -162,10 +156,12 @@ function Game() {
       if (select !== "환승안함" && result2.length === 0) return false;
       if (input === "신촌" && select !== "환승안함") return false;
       setStation(input);
-      visitedStations.push(input === "이수" ? "총신대입구" : input);
+      setVisitedStations((prev) => [
+        ...prev,
+        input === "이수" ? "총신대입구" : input,
+      ]);
       if (select !== "환승안함") {
-        setLine(select);
-        nowLine = select;
+        line = select;
         setSubText(`에서 ${realLines[select]} 환승`);
       }
       return true;
@@ -174,20 +170,25 @@ function Game() {
   };
   const calculateNext = () => {
     setSubText("");
-    console.log(nowLine);
+    console.log(line);
     const result = Subways.DATA.filter(
       (data) =>
-        data.line_num === nowLine && !visitedStations.includes(data.station_nm)
+        data.line_num === line &&
+        !visitedStations.includes(data.station_nm) &&
+        (data.station_nm === "이수"
+          ? !visitedStations.includes("총신대입구")
+          : true)
     );
     if (result.length === 0) {
       // 종료
+      navigate("/wrong", { state: { value: visitedStations } });
     }
     console.log(result.length);
     const newStation = result[Math.floor(Math.random() * result.length)];
     console.log(newStation);
     const transferStations = Subways.DATA.filter(
       (data) =>
-        data.station_nm === newStation.station_nm && data.line_num !== nowLine
+        data.station_nm === newStation.station_nm && data.line_num !== line
     );
     console.log(transferStations);
     if (transferStations.length > 0 && newStation.station_nm !== "신촌") {
@@ -196,42 +197,41 @@ function Game() {
         const newLineStation =
           transferStations[Math.floor(Math.random() * transferStations.length)];
         if (
-          nowLine !== newLineStation.line_num &&
+          line !== newLineStation.line_num &&
           lines.includes(newLineStation.line_num)
         ) {
           setSubText(`에서 ${realLines[newLineStation.line_num]} 환승`);
-          setLine(newLineStation.line_num);
-          nowLine = newLineStation.line_num;
+          line = newLineStation.line_num;
         }
       }
     }
     setStation(newStation.station_nm);
-    visitedStations.push(newStation.station_nm);
+    setVisitedStations((prev) => [...prev, newStation.station_nm]);
   };
   return (
-    <div style={{ backgroundColor: "white", width: "100vw", height: "100vh"}}>
-      {player === 0 ? <Timer color={colors[nowLine]} /> : <NoTimer />}
+    <div style={{ backgroundColor: "white", width: "100vw", height: "100vh" }}>
+      {player === 0 ? <Timer color={colors[line]} /> : <NoTimer />}
       <MainContainer>
         <PlayersContainer>
           {players.map((v) =>
             v === player ? (
-              <Player color={colors[nowLine]}></Player>
+              <Player color={colors[line]}></Player>
             ) : (
-              <NotPlayer color={colors[nowLine]}></NotPlayer>
+              <NotPlayer color={colors[line]}></NotPlayer>
             )
           )}
         </PlayersContainer>
-        <LineNumber color={colors[nowLine]}>{realLines[line]}</LineNumber>
-        <Box color={colors[nowLine]} />
-        <Circle color={colors[nowLine]}>
+        <LineNumber color={colors[line]}>{realLines[line]}</LineNumber>
+        <Box color={colors[line]} />
+        <Circle color={colors[line]}>
           <StationName
             springConfig={presets.wobbly}
             // inline={true}
-            color={colors[nowLine]}
+            color={colors[line]}
           >
             {station}
           </StationName>
-          <SubText color={colors[nowLine]}>{subtext}</SubText>
+          <SubText color={colors[line]}>{subtext}</SubText>
         </Circle>
         {player === 0 && (
           <div
@@ -269,7 +269,7 @@ function Game() {
               style={{
                 width: "200px",
                 marginTop: "10px",
-                backgroundColor: colors[nowLine],
+                backgroundColor: colors[line],
                 boxShadow: "0px 0px 0px 0px",
                 borderRadius: "10px",
               }}
