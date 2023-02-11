@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import Subways from "../api/subwaysApi.json";
 import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { MenuItem, Select, TextField, Button } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import TextTransition, { presets } from "react-text-transition";
 let timer;
 let line = "";
+let visitedStations = [];
 
 function Game() {
   const [input, setInput] = useState("");
@@ -13,7 +14,6 @@ function Game() {
   const [station, setStation] = useState("시작해주세요");
   const [subtext, setSubText] = useState(" ");
   const [player, setPlayer] = useState(0);
-  const [visitedStations, setVisitedStations] = useState([]);
   const lines = [
     "환승안함",
     "01호선",
@@ -107,7 +107,7 @@ function Game() {
         navigate("/wrong", { state: { value: visitedStations } });
       }, 10000);
     }
-  }, [player, visitedStations, navigate]);
+  }, [player, navigate]);
 
   const handleClick = () => {
     const correct = checkIfCorrect();
@@ -164,10 +164,7 @@ function Game() {
         return false;
       if (input === "신촌" && select !== "환승안함") return false;
       setStation(input);
-      setVisitedStations((prev) => [
-        ...prev,
-        input === "이수" ? "총신대입구" : input,
-      ]);
+      visitedStations.push(input === "이수" ? "총신대입구" : input);
       if (select !== "환승안함") {
         line = select;
         setSubText(`에서 ${realLines[select]} 환승`);
@@ -214,7 +211,7 @@ function Game() {
       }
     }
     setStation(newStation.station_nm);
-    setVisitedStations((prev) => [...prev, newStation.station_nm]);
+    visitedStations.push(newStation.station_nm);
   };
   return (
     <div style={{ backgroundColor: "white", width: "100vw", height: "100vh" }}>
