@@ -269,6 +269,8 @@ function Game() {
                 width: "200px",
                 marginTop: "10px",
                 backgroundColor: colors[nowLine],
+                boxShadow: "0px 0px 0px 0px",
+                borderRadius: "10px",
               }}
               onClick={handleClick}
             >

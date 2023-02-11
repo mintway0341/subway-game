@@ -51,6 +51,8 @@ function Wrong() {
           width: "200px",
           color: "black",
           backgroundColor: "#c8d6a4",
+          boxShadow: "0px 0px 0px 0px",
+          borderRadius: "10px",
         }}
         onClick={() => {
           navigate("/");
