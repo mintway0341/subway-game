@@ -110,7 +110,7 @@ function Game() {
         // alert("시간 초과");
         navigate("/wrong", { state: { value: visitedStations } });
         console.log(countCorrect);
-      }, 10000);
+      }, 10000000);
     }
   }, [player, navigate]);
 
@@ -248,9 +248,10 @@ function Game() {
                 onChange={(e) => {
                   setInput(e.target.value);
                 }}
+                style={{ width: "160px" }}
               />
               <Select
-                style={{ marginLeft: "10px" }}
+                style={{ marginLeft: "10px", width: "130px" }}
                 onChange={(e) => {
                   setSelect(e.target.value);
                 }}
@@ -390,6 +391,7 @@ const SubText = styled.p`
 const Inputs = styled.div`
   flex-direction: row;
   margin-top: 20px;
+  flex: 1;
 `;
 
 export default Game;
