@@ -209,7 +209,7 @@ function Game() {
     visitedStations.push(newStation.station_nm);
   };
   return (
-    <div style={{ backgroundColor: "white"}}>
+    <div style={{ backgroundColor: "white", width: "100vw", height: "100vh"}}>
       {player === 0 ? <Timer color={colors[nowLine]} /> : <NoTimer />}
       <MainContainer>
         <PlayersContainer>
