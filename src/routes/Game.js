@@ -108,7 +108,7 @@ function Game() {
     if (player === 0) {
       timer = setTimeout(() => {
         // alert("시간 초과");
-        navigate("/timeover");
+        navigate("/wrong", { state: { value: visitedStations } });
         console.log(countCorrect);
       }, 10000);
     }
@@ -122,7 +122,7 @@ function Game() {
     if (!correct) {
       clearTimeout(timer);
       // alert("틀렸습니다.");
-      navigate("/wrong");
+      navigate("/wrong", { state: { value: visitedStations } });
       console.log(countCorrect);
       return;
     }

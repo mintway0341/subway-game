@@ -112,6 +112,7 @@ const Line = styled.div`
   border-style: solid;
 `;
 const Doors = styled.div`
+  cursor: pointer;
   background-color: transparent;
   width: 200px;
   height: 150px;
