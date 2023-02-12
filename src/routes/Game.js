@@ -130,6 +130,22 @@ function Game() {
           !visitedStations.includes("숭실대입구")
       );
     }
+    if (input === "신촌" && line === "02호선") {
+      result = Subways.DATA.filter(
+        (data) =>
+          data.line_num === line &&
+          data.station_nm === input &&
+          !visitedStations.includes("신촌2")
+      );
+    }
+    if (input === "신촌" && line === "경의선") {
+      result = Subways.DATA.filter(
+        (data) =>
+          data.line_num === line &&
+          data.station_nm === input &&
+          !visitedStations.includes("신촌경의")
+      );
+    }
     if (result.length > 0) {
       const result2 = Subways.DATA.filter(
         (data) =>
@@ -149,7 +165,10 @@ function Game() {
       let newVisited = "";
       if (input === "이수") newVisited = "총신대입구";
       else if (input === "살피재") newVisited = "숭실대입구";
+      else if (input === "신촌" && line === "02호선") newVisited = "신촌2";
+      else if (input === "신촌" && line === "경의선") newVisited = "신촌경의";
       else newVisited = input;
+      console.log(input, line, newVisited);
       setVisitedStations((prev) => [...prev, newVisited]);
       if (select !== "환승안함") {
         setLine(select);
@@ -185,6 +204,12 @@ function Game() {
             !visitedStations.includes(data.station_nm) &&
             (data.station_nm === "이수"
               ? !visitedStations.includes("총신대입구")
+              : true) &&
+            (data.station_nm === "신촌" && data.line_num === "02호선"
+              ? !visitedStations.includes("신촌2")
+              : true) &&
+            (data.station_nm === "신촌" && data.line_num === "경의선"
+              ? !visitedStations.includes("신촌경의")
               : true)
         );
         if (result.length === 0) {
@@ -216,7 +241,21 @@ function Game() {
           }
         }
         setStation(newStation.station_nm);
-        setVisitedStations((prev) => [...prev, newStation.station_nm]);
+        let newVisited = "";
+        if (newStation.station_nm === "이수") newVisited = "총신대입구";
+        else if (newStation.station_nm === "살피재") newVisited = "숭실대입구";
+        else if (
+          newStation.station_nm === "신촌" &&
+          newStation.line_num === "02호선"
+        )
+          newVisited = "신촌2";
+        else if (
+          newStation.station_nm === "신촌" &&
+          newStation.line_num === "경의선"
+        )
+          newVisited = "신촌경의";
+        else newVisited = newStation.station_nm;
+        setVisitedStations((prev) => [...prev, newVisited]);
         setPlayer((prev) => (prev + 1) % 4);
       }, 2000);
     }

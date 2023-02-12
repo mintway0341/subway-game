@@ -15,6 +15,11 @@ function Wrong() {
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
   const day = now.getDate();
+  let startStation = visitedStations[0];
+  if (startStation === "신촌2" || startStation === "신촌경의")
+    startStation = "신촌";
+  let endStation = visitedStations[visitedStations.length - 1];
+  if (endStation === "신촌2" || endStation === "신촌경의") endStation = "신촌";
   return (
     <Container>
       {visitedStations.length > 0 && (
@@ -24,15 +29,13 @@ function Wrong() {
           </TicketTop>
           <TicketContents>
             <TicketLeft>
-              <StationText>{visitedStations[0]}</StationText>
+              <StationText>{startStation}</StationText>
             </TicketLeft>
             <TicketCenter>
               <TicketCenterText>▶</TicketCenterText>
             </TicketCenter>
             <TicketRight>
-              <StationText>
-                {visitedStations[visitedStations.length - 1]}
-              </StationText>
+              <StationText>{endStation}</StationText>
             </TicketRight>
           </TicketContents>
           <TicketBottom>
