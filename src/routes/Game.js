@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { TextField, Button } from "@mui/material";
 import TextTransition, { presets } from "react-text-transition";
 let timer;
-let line = "";
-let visitedStations = [];
 
 function Game() {
   const [input, setInput] = useState("");
   const [select, setSelect] = useState("환승안함");
+  const [line, setLine] = useState("");
   const [station, setStation] = useState("시작해주세요");
-  const [subtext, setSubText] = useState(" ");
+  const [subtext, setSubText] = useState("");
   const [player, setPlayer] = useState(0);
+  const [visitedStations, setVisitedStations] = useState([]);
   const lines = [
     "환승안함",
     "01호선",
@@ -90,26 +90,6 @@ function Game() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const firstLine = lines[1 + Math.floor(Math.random() * 13)];
-    visitedStations = [];
-    line = firstLine;
-    setSubText("");
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-
-  useEffect(() => {
-    clearTimeout(timer);
-    if (player === 0) {
-      timer = setTimeout(() => {
-        // alert("시간 초과");
-        navigate("/wrong", { state: { value: visitedStations } });
-      }, 10000);
-    }
-  }, [player, navigate]);
-
   const handleClick = () => {
     const correct = checkIfCorrect();
     setInput("");
@@ -120,14 +100,7 @@ function Game() {
       navigate("/wrong", { state: { value: visitedStations } });
       return;
     }
-    let count = 0;
     setPlayer(1);
-    let loop = setInterval(() => {
-      count++;
-      setPlayer((count + 1) % 4);
-      if (count >= 3) clearInterval(loop);
-      calculateNext();
-    }, 2500);
   };
   const handleKeyPress = (e) => {
     if (e.key === "Enter") handleClick();
@@ -177,55 +150,78 @@ function Game() {
       if (input === "이수") newVisited = "총신대입구";
       else if (input === "살피재") newVisited = "숭실대입구";
       else newVisited = input;
-      visitedStations.push(newVisited);
+      setVisitedStations((prev) => [...prev, newVisited]);
       if (select !== "환승안함") {
-        line = select;
+        setLine(select);
         setSubText(`에서 ${realLines[select]} 환승`);
       }
       return true;
     }
     return false;
   };
-  const calculateNext = () => {
-    setSubText("");
-    console.log(line);
-    const result = Subways.DATA.filter(
-      (data) =>
-        data.line_num === line &&
-        !visitedStations.includes(data.station_nm) &&
-        (data.station_nm === "이수"
-          ? !visitedStations.includes("총신대입구")
-          : true)
-    );
-    if (result.length === 0) {
-      // 종료
-      navigate("/wrong", { state: { value: visitedStations } });
-    }
-    console.log(result.length);
-    const newStation = result[Math.floor(Math.random() * result.length)];
-    console.log(newStation);
-    const transferStations = Subways.DATA.filter(
-      (data) =>
-        data.station_nm === newStation.station_nm && data.line_num !== line
-    );
-    console.log(transferStations);
-    if (transferStations.length > 0 && newStation.station_nm !== "신촌") {
-      const willTransfer = Math.random() >= 0.55 ? 1 : 0;
-      if (willTransfer) {
-        const newLineStation =
-          transferStations[Math.floor(Math.random() * transferStations.length)];
-        if (
-          line !== newLineStation.line_num &&
-          lines.includes(newLineStation.line_num)
-        ) {
-          setSubText(`에서 ${realLines[newLineStation.line_num]} 환승`);
-          line = newLineStation.line_num;
+
+  useEffect(() => {
+    const firstLine = lines[1 + Math.floor(Math.random() * 13)];
+    setLine(firstLine);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    clearTimeout(timer);
+    if (player === 0) {
+      timer = setTimeout(() => {
+        // alert("시간 초과");
+        navigate("/wrong", { state: { value: visitedStations } });
+      }, 10000);
+    } else {
+      setTimeout(() => {
+        setSubText("");
+        console.log(line);
+        const result = Subways.DATA.filter(
+          (data) =>
+            data.line_num === line &&
+            !visitedStations.includes(data.station_nm) &&
+            (data.station_nm === "이수"
+              ? !visitedStations.includes("총신대입구")
+              : true)
+        );
+        if (result.length === 0) {
+          // 종료
+          navigate("/wrong", { state: { value: visitedStations } });
         }
-      }
+        console.log(result.length);
+        const newStation = result[Math.floor(Math.random() * result.length)];
+        console.log(newStation);
+        const transferStations = Subways.DATA.filter(
+          (data) =>
+            data.station_nm === newStation.station_nm && data.line_num !== line
+        );
+        console.log(transferStations);
+        if (transferStations.length > 0 && newStation.station_nm !== "신촌") {
+          const willTransfer = Math.random() >= 0.55 ? 1 : 0;
+          if (willTransfer) {
+            const newLineStation =
+              transferStations[
+                Math.floor(Math.random() * transferStations.length)
+              ];
+            if (
+              line !== newLineStation.line_num &&
+              lines.includes(newLineStation.line_num)
+            ) {
+              setSubText(`에서 ${realLines[newLineStation.line_num]} 환승`);
+              setLine(newLineStation.line_num);
+            }
+          }
+        }
+        setStation(newStation.station_nm);
+        setVisitedStations((prev) => [...prev, newStation.station_nm]);
+        setPlayer((prev) => (prev + 1) % 4);
+      }, 2000);
     }
-    setStation(newStation.station_nm);
-    visitedStations.push(newStation.station_nm);
-  };
+  }, [player, line, navigate, visitedStations]);
+
   return (
     <div style={{ backgroundColor: "white", width: "100vw", height: "100vh" }}>
       {player === 0 ? <Timer color={colors[line]} /> : <NoTimer />}
