@@ -64,6 +64,7 @@ function Wrong() {
         onClick={() => {
           setClicked(true);
         }}
+        style={{ cursor: "pointer" }}
       >
         개발자에게 관심 주기
       </p>
