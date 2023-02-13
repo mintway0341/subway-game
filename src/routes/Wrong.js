@@ -18,8 +18,11 @@ function Wrong() {
   let startStation = visitedStations[0];
   if (startStation === "신촌2" || startStation === "신촌경의")
     startStation = "신촌";
+  if (startStation === "양평5" || startStation === "양평경의")
+    startStation = "양평";
   let endStation = visitedStations[visitedStations.length - 1];
   if (endStation === "신촌2" || endStation === "신촌경의") endStation = "신촌";
+  if (endStation === "양평5" || endStation === "양평경의") endStation = "양평";
   return (
     <Container>
       {visitedStations.length > 0 && (

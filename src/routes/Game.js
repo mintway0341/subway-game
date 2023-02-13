@@ -146,6 +146,22 @@ function Game() {
           !visitedStations.includes("신촌경의")
       );
     }
+    if (input === "양평" && line === "05호선") {
+      result = Subways.DATA.filter(
+        (data) =>
+          data.line_num === line &&
+          data.station_nm === input &&
+          !visitedStations.includes("양평5")
+      );
+    }
+    if (input === "양평" && line === "경의선") {
+      result = Subways.DATA.filter(
+        (data) =>
+          data.line_num === line &&
+          data.station_nm === input &&
+          !visitedStations.includes("양평경의")
+      );
+    }
     if (result.length > 0) {
       const result2 = Subways.DATA.filter(
         (data) =>
@@ -161,12 +177,15 @@ function Game() {
       )
         return false;
       if (input === "신촌" && select !== "환승안함") return false;
+      if (input === "양평" && select !== "환승안함") return false;
       setStation(input);
       let newVisited = "";
       if (input === "이수") newVisited = "총신대입구";
       else if (input === "살피재") newVisited = "숭실대입구";
       else if (input === "신촌" && line === "02호선") newVisited = "신촌2";
       else if (input === "신촌" && line === "경의선") newVisited = "신촌경의";
+      else if (input === "양평" && line === "05호선") newVisited = "양평5";
+      else if (input === "양평" && line === "경의선") newVisited = "양평경의";
       else newVisited = input;
       console.log(input, line, newVisited);
       setVisitedStations((prev) => [...prev, newVisited]);
@@ -210,6 +229,12 @@ function Game() {
               : true) &&
             (data.station_nm === "신촌" && data.line_num === "경의선"
               ? !visitedStations.includes("신촌경의")
+              : true) &&
+            (data.station_nm === "양평" && data.line_num === "05호선"
+              ? !visitedStations.includes("양평5")
+              : true) &&
+            (data.station_nm === "양평" && data.line_num === "경의선"
+              ? !visitedStations.includes("양평경의")
               : true)
         );
         if (result.length === 0) {
@@ -224,7 +249,11 @@ function Game() {
             data.station_nm === newStation.station_nm && data.line_num !== line
         );
         console.log(transferStations);
-        if (transferStations.length > 0 && newStation.station_nm !== "신촌") {
+        if (
+          transferStations.length > 0 &&
+          newStation.station_nm !== "신촌" &&
+          newStation.station_nm !== "양평"
+        ) {
           const willTransfer = Math.random() >= 0.55 ? 1 : 0;
           if (willTransfer) {
             const newLineStation =
@@ -254,6 +283,16 @@ function Game() {
           newStation.line_num === "경의선"
         )
           newVisited = "신촌경의";
+        else if (
+          newStation.station_nm === "양평" &&
+          newStation.line_num === "05호선"
+        )
+          newVisited = "양평5";
+        else if (
+          newStation.station_nm === "양평" &&
+          newStation.line_num === "경의선"
+        )
+          newVisited = "양평경의";
         else newVisited = newStation.station_nm;
         setVisitedStations((prev) => [...prev, newVisited]);
         setPlayer((prev) => (prev + 1) % 4);
